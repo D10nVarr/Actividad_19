@@ -35,10 +35,11 @@ class GalletaRellena(Galleta, Relleno):
 class AgregarGalletasSimples:
     def __init__(self):
         self.galletas = []
+
     def registrar_galleta(self):
         try:
             while True:
-                nombre=input("Ingrese el nombre de la galleta: ")
+                nombre=input("Ingrese el nombre de la galleta: ").lower()
                 if nombre.strip() == "":
                     print("El nombre no puede quedar vacio")
                 else:
@@ -65,9 +66,43 @@ class AgregarGalletasSimples:
         nombre, precio, peso = self.registrar_galleta()
         self.galletas.append(Galleta(nombre,precio,peso))
 
+    def mostrar_charola(self):
+        if not self.galletas:
+            print("No hay galletas registradas.\n")
+        else:
+            print("\nLista de de galletas:")
+            for i, cookie in enumerate(self.galletas, start=1):
+                print(f"{i}. {cookie.mostrar_info()}")
+            print()
+
+    def buscar_galleta(self):
+        if not self.galletas:
+            print("No hay galletas registradas.\n")
+        buscador=input("Ingrese el nombre de la galleta: ").lower()
+        if buscador not in self.galletas:
+            print("La galleta no existe")
+        else:
+            for i in self.galletas:
+                if buscador==i:
+                    print(f"La galletas es {i}")
+                    break
+
+    def eliminar_galleta(self):
+        if not self.galletas:
+            print("No hay galletas registradas.\n")
+        eliminador = input("Ingrese el nombre de la galleta que desea eliminar: ").lower()
+        if eliminador not in self.galletas:
+            print("La galleta no existe")
+        else:
+            for i in self.galletas:
+                if eliminador == i:
+                    self.galletas.remove(i)
+                    break
+
+
 class AgregarGalletasChispas(GalletaChispas, AgregarGalletasSimples):
     def agregar_galleta(self):
-        nombre, precio, peso = self.registrar_galleta()
+        nombre, precio, peso = self.registrar_galleta()#Para reutilizar el ingreso da los datos
         try:
             while True:
                 chispas=int(input("Ingrese el cantidad de chispas de su galleta: "))
@@ -95,4 +130,41 @@ class AgregarGalletasRellenas(GalletaRellena, AgregarGalletasSimples):
         except Exception as e:
             print("Error inesperado", e)
 
+simple=AgregarGalletasSimples()
+chispa=AgregarGalletasChispas(None,None,None,None)
+sabor=AgregarGalletasRellenas(None,None,None,None)
+
+while True:
+    print("__REPOSTERIA DE GALLETAS__")
+    print("1. Registrar galleta básica")
+    print("2. Registrar galleta con chispas")
+    print("3. Registrar galleta rellena")
+    print("4. Listar galletas")
+    print("5. Buscar por nombre")
+    print("6. Eliminar por nombre")
+    print("7. Salir")
+
+    opcion=input("\nEscoja una opción: ")
+
+    match opcion:
+        case "1":
+            simple.agregar_galleta()
+            print("Galleta simple registrada\n")
+        case "2":
+            chispa.agregar_galleta()
+            print("Galleta con chispas registrada\n")
+        case "3":
+            sabor.agregar_galleta()
+            print("Galleta rellena registrada\n")
+        case "4":
+            simple.mostrar_charola()
+        case "5":
+            simple.buscar_galleta()
+        case "6":
+            simple.eliminar_galleta()
+        case "7":
+            print("Saliendo del programa...")
+            break
+        case _:
+            print("Opción no existente")
 
